@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "../game.h"
+#include "../include/game.h"
 
 
 int main()

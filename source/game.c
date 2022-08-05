@@ -1,4 +1,4 @@
-#include "game.h"
+#include "../include/game.h"
 
 void showMenu(GameState state, GameMode mode)
 {
