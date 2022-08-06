@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "pch.h"
+
 typedef enum GameState
 {
 	Menu = 0,
@@ -17,5 +19,9 @@ typedef enum GameMode
 } GameMode;
 
 void showMenu(GameState state, GameMode mode);
+
+void generateSequence(GameMode mode, char* sequence);
+
+void findTheBeasts(char* answer, char* guess, int* bulls, int* cows);
 
 #endif /* GAME_H */
