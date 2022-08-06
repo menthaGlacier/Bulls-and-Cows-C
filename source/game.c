@@ -31,14 +31,17 @@ void generateSequence(GameMode mode, char* sequence)
 
 		if (!file)
 		{
-			// TODO Error message here
+			puts("An error occured while trying to open file");
+			exit(-1);
 		}
 
 		fscanf(file, "%d", &wordsAmount);
 
-		if (wordsAmount < MINWORDSAMOUNT || wordsAmount > MAXWORDSAMOUNT) /* TODO Add constants */
+		if (wordsAmount < MINWORDSAMOUNT || wordsAmount > MAXWORDSAMOUNT)
 		{
-			// TODO Error message here
+			printf("Amount of words should be in [%d; %d] range\n",
+				MINWORDSAMOUNT, MAXWORDSAMOUNT);
+			exit(-2);
 		}
 
 		// TODO Finish words reading, filtering and writing in array
@@ -57,11 +60,11 @@ void generateSequence(GameMode mode, char* sequence)
 		int N = 10;
 		char* number = "";
 		int buffer[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-		int difficulty = randomGenerator(MINNUMSIZE, MAXNUMSIZE); /* TODO Add constants */
+		int difficulty = randomNumberGenerator(MINNUMSIZE, MAXNUMSIZE);
 
 		for (int i = 0; i < difficulty; i++)
 		{
-			int tryNumber = randomGenerator(0, N - 1);
+			int tryNumber = randomNumberGenerator(0, N - 1);
 			number += (buffer[tryNumber] + '0'); /* Converting int to char */
 
 			buffer[tryNumber] = 99;

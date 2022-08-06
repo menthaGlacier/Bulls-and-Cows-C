@@ -24,6 +24,7 @@ int main()
 			else if (mode == Numbers) { puts("digit number"); }
 
 			lives = strlen(answer) * 2;
+			state = Play;
 		}
 
 		if (state == Win)
@@ -42,6 +43,18 @@ int main()
 			showMenu(state, mode);
 			// TODO processing input
 		}
+
+		if (lives == 1) { puts("Last attempt"); }
+		else { printf("You have %d lives left\n", lives); }
+
+		puts("Your guess: ", guess);
+		// TODO input
+		findTheBeasts(answer, guess, &bulls, &cows);
+
+		printf("Bulls: %d\nCows: %d\n\n", bulls, cows);
+
+		if (bulls == strlen(answer)) { state = Win; }
+		else { lives--; }
 	}
 
 	return 0;
