@@ -38,7 +38,7 @@ int main()
 		if (lives == 0)
 		{
 			puts("Unfortunately, the game is over");
-			puts("The answer is: ", answer);
+			printf("The answer is: %s", answer);
 
 			showMenu(state, mode);
 			// TODO processing input
@@ -47,8 +47,10 @@ int main()
 		if (lives == 1) { puts("Last attempt"); }
 		else { printf("You have %d lives left\n", lives); }
 
-		puts("Your guess: ", guess);
-		// TODO input
+		printf("Your guess: ");
+		fgets(guess, strlen(answer), stdin); /* Reading no more than length of answer */
+		fseek(stdin, 0, SEEK_END); /* Discarding unread characters from input stream */
+
 		findTheBeasts(answer, guess, &bulls, &cows);
 
 		printf("Bulls: %d\nCows: %d\n\n", bulls, cows);
