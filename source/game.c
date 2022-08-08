@@ -20,12 +20,16 @@ void generateSequence(GameMode mode, char* sequence)
 	// Words Game Mode Algorithm:
 	// The algorithm opens "words.txt" file and reads from it a number that specifies
 	// the size of the words array. It then reads words from file until the size limit
-	// is reached, or until the words run out earlier.
+	// is reached, or until the words run out earlier. Each word is converted to lowercase
+	// and written in the array if it successfully passes the filter. The sequence is then
+	// randomly selected from the array and array gets deleted
 
+	// TODO Fix words reading, add array deleting 
 	if (mode == Words)
 	{
 		FILE* file = NULL;
-		int wordsAmount = 0;
+		char** words = NULL;
+		int maxWordsAmount = 0;
 
 		file = fopen("words.txt", "r");
 
@@ -35,18 +39,40 @@ void generateSequence(GameMode mode, char* sequence)
 			exit(-1);
 		}
 
-		fscanf(file, "%d", &wordsAmount);
+		fscanf(file, "%d", &maxWordsAmount);
 
-		if (wordsAmount < MINWORDSAMOUNT || wordsAmount > MAXWORDSAMOUNT)
+		if (maxWordsAmount < MINWORDSAMOUNT || maxWordsAmount > MAXWORDSAMOUNT)
 		{
 			printf("Amount of words should be in [%d; %d] range\n",
 				MINWORDSAMOUNT, MAXWORDSAMOUNT);
 			exit(-2);
 		}
 
-		// TODO Finish words reading, filtering and writing in array
-		// TODO Finish random taking word from array
+		words = (char**)(malloc(maxWordsAmount * sizeof(char*)));
+		if (!words)
+		{
+			puts("An error occurred while trying to allocate memory for a words array");
+			exit(-3);
+		}
 
+		int readWordsAmount = 0;
+		for (int i = 0; i < maxWordsAmount; i++)
+		{
+			char buffer[255] = "";
+
+			words[i] = (char*)(malloc(MAXWORDSIZE + 1));
+			if (!words[i])
+			{
+				puts("An error occurred while trying to allocate memory for a word");
+				exit(-4);
+			}
+
+			if (fgets(buffer, MAXWORDSIZE + 1, file) == NULL) { readWordsAmount = i; break; }
+			if (!filter(buffer)) { --i; continue; }
+			strcpy(words[i], buffer);
+		}
+
+		strcpy(sequence, words[randomNumberGenerator(0, readWordsAmount)]);
 		fclose(file);
 	}
 

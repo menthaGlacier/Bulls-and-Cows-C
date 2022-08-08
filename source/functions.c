@@ -50,3 +50,34 @@ void sortString(char* str)
 		}
 	}
 }
+
+bool filter(char* word)
+{
+	if (!word)
+	{
+		puts("A word passed to the filter was an empty pointer");
+		exit(-5);
+	}
+
+	int wordLen = strlen(word);
+
+	// Length check
+	if (wordLen < MINWORDSIZE || wordLen > MAXWORDSIZE)
+	{
+		return false;
+	}
+
+	// Letter and isogram check
+	for (int i = 0; i < wordLen; i++)
+	{
+		sortString(word);
+
+		if (!((word[i] >= 'a' && word[i] <= 'z') ||
+			(word[i] >= 'A' && word[i] <= 'Z'))) { return false; }
+
+		if (word[i + 1] == word[i]) { return false; }
+	}
+
+	toLowercase(word);
+	return true;
+}
