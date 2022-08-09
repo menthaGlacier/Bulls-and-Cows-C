@@ -19,10 +19,10 @@ void generateSequence(GameMode mode, char* sequence)
 {
 	// Words Game Mode Algorithm:
 	// The algorithm opens "words.txt" file and reads from it a number that specifies
-	// the size of the words array. It then reads words from file until the size limit
-	// is reached, or until the words run out earlier. Each word is converted to lowercase
-	// and written in the array if it successfully passes the filter. The sequence is then
-	// randomly selected from the array and array gets deleted
+	// the size of the words array. It then allocates memory to an array of strings and
+	// reads words from file until the size limit is reached, or until the words run out earlier. 
+	// Each word passes through a filter and after passing successfully is converted to lowercase
+	// and written in the array. The sequence is then randomly selected from the array and array gets deleted
 
 	if (mode == Words)
 	{
@@ -71,9 +71,18 @@ void generateSequence(GameMode mode, char* sequence)
 			strcpy(words[i], buffer);
 		}
 
+		if (readWordsAmount < MINWORDSAMOUNT)
+		{
+			printf("The number of words read is less than the required minimum of %d words",
+				MINWORDSAMOUNT);
+			exit(-6);
+		}
+
 		strcpy(sequence, words[randomNumberGenerator(0, readWordsAmount)]);
 
 		// Freeing up memory and closing the file
+		// Freeing readWordsAmount-times, because memory allocation stops
+		// after the last word is read 
 		for (int i = 0; i < readWordsAmount; i++) { free(words[i]); }
 		free(words);
 		fclose(file);
