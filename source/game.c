@@ -59,7 +59,7 @@ void generateSequence(GameMode mode, char* sequence)
 		{
 			char buffer[255] = "";
 
-			words[i] = (char*)(malloc(MAXWORDSIZE + 1));
+			words[i] = (char*)(malloc((MAXWORDSIZE + 1) * sizeof(char)));
 			if (!words[i])
 			{
 				puts("An error occurred while trying to allocate memory for a word");
@@ -96,20 +96,29 @@ void generateSequence(GameMode mode, char* sequence)
 	if (mode == Numbers)
 	{
 		int N = 10;
-		char* number = "";
+		char* number = NULL;
 		int buffer[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		int difficulty = randomNumberGenerator(MINNUMSIZE, MAXNUMSIZE);
+
+		number = (char*)(malloc((difficulty + 1) * sizeof(char)));
+		if (!number)
+		{
+			puts("An error occured while trying to allocate memory for a number");
+			exit(-7);
+		}
 
 		for (int i = 0; i < difficulty; i++)
 		{
 			int tryNumber = randomNumberGenerator(0, N - 1);
-			number += (buffer[tryNumber] + '0'); /* Converting int to char */
+			number[i] = (buffer[tryNumber] + '0'); /* Converting int to char */
 
 			buffer[tryNumber] = 99;
 			sortNumbers(buffer, N); N -= 1;
 		}
 
+		number[difficulty] = '\0';
 		strcpy(sequence, number);
+		free(number);
 	}
 }
 
