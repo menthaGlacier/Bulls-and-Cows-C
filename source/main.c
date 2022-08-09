@@ -3,6 +3,7 @@
 
 int main()
 {
+	srand(time(NULL));
 	GameState state = Menu;
 	GameMode mode = None;
 
@@ -35,7 +36,7 @@ int main()
 			// TODO processing input
 		}
 
-		if (lives == 0)
+		if (mode == Lose)
 		{
 			puts("Unfortunately, the game is over");
 			printf("The answer is: %s", answer);
@@ -56,7 +57,11 @@ int main()
 		printf("Bulls: %d\nCows: %d\n\n", bulls, cows);
 
 		if (bulls == strlen(answer)) { state = Win; }
-		else { lives--; }
+		else
+		{
+			lives--;
+			if (lives <= 0) { mode = Lose; }
+		}
 	}
 
 	return 0;

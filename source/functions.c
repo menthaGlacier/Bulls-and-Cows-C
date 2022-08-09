@@ -53,13 +53,18 @@ void sortString(char* str)
 
 bool filter(char* word)
 {
-	if (!word)
+	// Creating a copy of the string so as not to change the original
+	// one when sorting for a letter and isogram check
+	char wordBuffer[255] = "";
+	strcpy(wordBuffer, word);
+
+	if (!wordBuffer)
 	{
 		puts("A word passed to the filter was an empty pointer");
 		exit(-5);
 	}
 
-	int wordLen = strlen(word);
+	int wordLen = strlen(wordBuffer);
 
 	// Length check
 	if (wordLen < MINWORDSIZE || wordLen > MAXWORDSIZE)
@@ -70,14 +75,16 @@ bool filter(char* word)
 	// Letter and isogram check
 	for (int i = 0; i < wordLen; i++)
 	{
-		sortString(word);
+		sortString(wordBuffer);
 
-		if (!((word[i] >= 'a' && word[i] <= 'z') ||
-			(word[i] >= 'A' && word[i] <= 'Z'))) { return false; }
+		if (!((wordBuffer[i] >= 'a' && wordBuffer[i] <= 'z') ||
+			(wordBuffer[i] >= 'A' && wordBuffer[i] <= 'Z'))) { return false; }
 
-		if (word[i + 1] == word[i]) { return false; }
+		if (wordBuffer[i + 1] == wordBuffer[i]) { return false; }
 	}
 
+	// After successfully passing the checks, we translate the
+	// original string into lowercase
 	toLowercase(word);
 	return true;
 }

@@ -67,7 +67,7 @@ void generateSequence(GameMode mode, char* sequence)
 				exit(-4);
 			}
 
-			if (fgets(buffer, MAXWORDSIZE + 1, file) == NULL) { readWordsAmount = i; break; }
+			if (fscanf(file, " %s", buffer) == EOF) { readWordsAmount = i; break; }
 			if (!filter(buffer)) { --i; continue; }
 			strcpy(words[i], buffer);
 		}
