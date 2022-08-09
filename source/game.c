@@ -24,7 +24,6 @@ void generateSequence(GameMode mode, char* sequence)
 	// and written in the array if it successfully passes the filter. The sequence is then
 	// randomly selected from the array and array gets deleted
 
-	// TODO Fix words reading, add array deleting 
 	if (mode == Words)
 	{
 		FILE* file = NULL;
@@ -73,11 +72,15 @@ void generateSequence(GameMode mode, char* sequence)
 		}
 
 		strcpy(sequence, words[randomNumberGenerator(0, readWordsAmount)]);
+
+		// Freeing up memory and closing the file
+		for (int i = 0; i < readWordsAmount; i++) { free(words[i]); }
+		free(words);
 		fclose(file);
 	}
 
 	// Numbers Game Mode Algorithm:
-	// The algorithm takes a random digit (in range of 0 to 9) from array of digits
+	// The algorithm takes a random digit (in range of 0 to 9) from an array of digits
 	// and replaces it with 99, it then sorts array and decrease N, repeating the
 	// process until the number of length of difficulty is created 
 
@@ -105,9 +108,9 @@ void findTheBeasts(char* answer, char* guess, int* bulls, int* cows)
 {
 	*bulls = 0, *cows = 0;
 
-	for (int i = 0; i < strlen(guess); i++)
+	for (size_t i = 0; i < strlen(guess); i++)
 	{
-		for (int j = 0; j < strlen(answer); j++)
+		for (size_t j = 0; j < strlen(answer); j++)
 		{
 			if (guess[i] == answer[j])
 			{
