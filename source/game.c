@@ -89,15 +89,16 @@ void generateSequence(GameMode mode, char* sequence)
 	}
 
 	// Numbers Game Mode Algorithm:
-	// The algorithm takes a random digit (in range of 0 to 9) from an array of digits
-	// and replaces it with 99, it then sorts array and decrease N, repeating the
-	// process until the number of length of difficulty is created 
+	// The algorithm gets a random difficulty and then allocates memory to an array the size of the difficulty.
+	// It then takes a random number in the range of 0 to N from the pool of digits, writes it to the resulting array
+	// and replaces that digit with 99. Sorting the array and decrementing N removes the digit from the pool.
+	// This process is repeated difficulty-times until the final number sequence is created
 
 	if (mode == Numbers)
 	{
 		int N = 10;
 		char* number = NULL;
-		int buffer[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		int pool[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		int difficulty = randomNumberGenerator(MINNUMSIZE, MAXNUMSIZE);
 
 		number = (char*)(malloc((difficulty + 1) * sizeof(char)));
@@ -110,10 +111,12 @@ void generateSequence(GameMode mode, char* sequence)
 		for (int i = 0; i < difficulty; i++)
 		{
 			int tryNumber = randomNumberGenerator(0, N - 1);
-			number[i] = (buffer[tryNumber] + '0'); /* Converting int to char */
+			number[i] = (pool[tryNumber] + '0'); /* Converting int to char */
 
-			buffer[tryNumber] = 99;
-			sortNumbers(buffer, N); N -= 1;
+			// 99 is a placeholder, any number greater than 9 will work,
+			// to remove a digit from the pool
+			pool[tryNumber] = 99;
+			sortNumbers(pool, N); N -= 1;
 		}
 
 		number[difficulty] = '\0';
