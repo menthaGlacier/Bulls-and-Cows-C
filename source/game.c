@@ -11,7 +11,70 @@ void showMenu(GameState state, GameMode mode)
 	else if (state == Win || state == Lose)
 	{
 		puts("Do you want to play again?");
-		puts("1 - Yes, continue\n" "2 - Yes, switch Game Mode\n" "3 - No, Exit the Game");
+		puts("1 - Continue\n" "2 - Switch Game Mode\n" "3 - Exit to the Main Menu");
+	}
+}
+
+void processChoice(GameState* state, GameMode* mode)
+{
+	char choice = '0';
+
+	while (true)
+	{
+		fputs("Your choice: ", stdout);
+		choice = getchar();
+		fseek(stdin, 0, SEEK_END); /* Discarding unread characters from input stream */
+
+		// From the main menu, the player can start a session with two game modes or exit
+		if (*state == Menu)
+		{
+			if (choice == '1')
+			{
+				*mode = Words;
+				*state = Play;
+				break;
+			}
+
+			else if (choice == '2')
+			{
+				*mode = Numbers;
+				*state = Play;
+				break;
+			}
+
+			else if (choice == '3')
+			{
+				exit(0);
+			}
+		}
+
+		// When the game is over, regardless of winning or losing, the player can start
+		// a new session, change the game mode or return to the main menu
+		else if (*state == Win || *state == Lose)
+		{
+			if (choice == '1')
+			{
+				*state = Play;
+				break;
+			}
+
+			else if (choice == '2')
+			{
+				*state = Play;
+				if (*mode == Words) { *mode = Numbers; }
+				else if (*mode == Numbers) { *mode = Words; }
+
+				break;
+			}
+
+			else if (state != Play && choice == '3')
+			{
+				*state = Menu;
+				*mode = None;
+				break;
+			}
+
+		}
 	}
 }
 

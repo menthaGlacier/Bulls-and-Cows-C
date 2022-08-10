@@ -11,13 +11,15 @@ int main()
 	char answer[10], guess[10];
 
 	puts("Welcome to the Bulls and Cows");
-	showMenu(state, mode);
-	// TODO game start and processing input
 
 	while (true)
 	{
 		if (state == Menu)
 		{
+			showMenu(state, mode);
+			processChoice(&state, &mode);
+
+			// FIXME This code is only executed when player starts the game from the main menu
 			generateSequence(mode, answer);
 			printf("Try to guess the %d ", strlen(answer));
 
@@ -25,7 +27,6 @@ int main()
 			else if (mode == Numbers) { puts("digit number"); }
 
 			lives = strlen(answer) * 2;
-			state = Play;
 		}
 
 		if (state == Win)
@@ -33,34 +34,37 @@ int main()
 			puts("Congratulations, you've won! Thanks for playing!");
 
 			showMenu(state, mode);
-			// TODO processing input
+			processChoice(&state, &mode);
 		}
 
-		if (mode == Lose)
+		if (state == Lose)
 		{
 			puts("Unfortunately, the game is over");
 			printf("The answer is: %s", answer);
 
 			showMenu(state, mode);
-			// TODO processing input
+			processChoice(&state, &mode);
 		}
 
-		if (lives == 1) { puts("Last attempt"); }
-		else { printf("You have %d lives left\n", lives); }
-
-		printf("Your guess: ");
-		fgets(guess, strlen(answer), stdin); /* Reading no more than length of answer */
-		fseek(stdin, 0, SEEK_END); /* Discarding unread characters from input stream */
-
-		findTheBeasts(answer, guess, &bulls, &cows);
-
-		printf("Bulls: %d\nCows: %d\n\n", bulls, cows);
-
-		if (bulls == strlen(answer)) { state = Win; }
-		else
+		if (state == Play)
 		{
-			lives--;
-			if (lives <= 0) { mode = Lose; }
+			if (lives == 1) { puts("Last attempt"); }
+			else { printf("You have %d lives left\n", lives); }
+
+			fputs("Your guess: ", stdout);
+			fgets(guess, strlen(answer) + 1, stdin); /* Reading no more than length of answer */
+			fseek(stdin, 0, SEEK_END); /* Discarding unread characters from input stream */
+
+			findTheBeasts(answer, guess, &bulls, &cows);
+
+			printf("Bulls: %d\nCows: %d\n\n", bulls, cows);
+
+			if (bulls == strlen(answer)) { state = Win; }
+			else
+			{
+				lives--;
+				if (lives <= 0) { mode = Lose; }
+			}
 		}
 	}
 

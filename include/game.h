@@ -22,6 +22,8 @@ typedef enum GameMode
 
 void showMenu(GameState state, GameMode mode);
 
+void processChoice(GameState* state, GameMode* mode);
+
 void generateSequence(GameMode mode, char* sequence);
 
 void findTheBeasts(char* answer, char* guess, int* bulls, int* cows);
