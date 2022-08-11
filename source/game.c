@@ -15,7 +15,19 @@ void showMenu(GameState state, GameMode mode)
 	}
 }
 
-void processChoice(GameState* state, GameMode* mode)
+void initGameSession(Game* game)
+{
+	generateSequence(game->mode, game->answer);
+	printf("Try to guess the %d ", strlen(game->answer));
+
+	if (game->mode == Words) { puts("letter word"); }
+	else if (game->mode == Numbers) { puts("digit number"); }
+
+	game->bulls = 0, game->cows = 0;
+	game->lives = strlen(game->answer) * 2;
+}
+
+void processChoice(Game* game)
 {
 	char choice = '0';
 
@@ -26,19 +38,21 @@ void processChoice(GameState* state, GameMode* mode)
 		fseek(stdin, 0, SEEK_END); /* Discarding unread characters from input stream */
 
 		// From the main menu, the player can start a session with two game modes or exit
-		if (*state == Menu)
+		if (game->state == Menu)
 		{
 			if (choice == '1')
 			{
-				*mode = Words;
-				*state = Play;
+				game->mode = Words;
+				game->state = Play;
+				initGameSession(game);
 				break;
 			}
 
 			else if (choice == '2')
 			{
-				*mode = Numbers;
-				*state = Play;
+				game->mode = Numbers;
+				game->state = Play;
+				initGameSession(game);
 				break;
 			}
 
@@ -50,27 +64,28 @@ void processChoice(GameState* state, GameMode* mode)
 
 		// When the game is over, regardless of winning or losing, the player can start
 		// a new session, change the game mode or return to the main menu
-		else if (*state == Win || *state == Lose)
+		else if (game->state == Win || game->state == Lose)
 		{
 			if (choice == '1')
 			{
-				*state = Play;
+				game->state = Play;
+				initGameSession(game);
 				break;
 			}
 
 			else if (choice == '2')
 			{
-				*state = Play;
-				if (*mode == Words) { *mode = Numbers; }
-				else if (*mode == Numbers) { *mode = Words; }
-
+				game->state = Play;
+				if (game->mode == Words) { game->mode = Numbers; }
+				else if (game->mode == Numbers) { game->mode = Words; }
+				initGameSession(game);
 				break;
 			}
 
-			else if (state != Play && choice == '3')
+			else if (choice == '3')
 			{
-				*state = Menu;
-				*mode = None;
+				game->state = Menu;
+				game->mode = None;
 				break;
 			}
 
@@ -188,6 +203,7 @@ void generateSequence(GameMode mode, char* sequence)
 	}
 }
 
+// This function finds bulls and cows by comparing the player's guess with an answer
 void findTheBeasts(char* answer, char* guess, int* bulls, int* cows)
 {
 	*bulls = 0, *cows = 0;

@@ -20,9 +20,20 @@ typedef enum GameMode
 	Numbers = 2
 } GameMode;
 
+typedef struct Game
+{
+	GameState state;
+	GameMode mode;
+
+	int bulls, cows, lives;
+	char answer[10], guess[10];
+} Game;
+
 void showMenu(GameState state, GameMode mode);
 
-void processChoice(GameState* state, GameMode* mode);
+void initGameSession(Game* game);
+
+void processChoice(Game* game);
 
 void generateSequence(GameMode mode, char* sequence);
 

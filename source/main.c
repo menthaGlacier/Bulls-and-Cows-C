@@ -4,66 +4,56 @@
 int main()
 {
 	srand(time(NULL));
-	GameState state = Menu;
-	GameMode mode = None;
+	Game game;
 
-	int bulls = 0, cows = 0, lives = 1;
-	char answer[10], guess[10];
+	game.state = Menu;
+	game.mode = None;
 
 	puts("Welcome to the Bulls and Cows");
 
 	while (true)
 	{
-		if (state == Menu)
+		if (game.state == Menu)
 		{
-			showMenu(state, mode);
-			processChoice(&state, &mode);
-
-			// FIXME This code is only executed when player starts the game from the main menu
-			generateSequence(mode, answer);
-			printf("Try to guess the %d ", strlen(answer));
-
-			if (mode == Words) { puts("letter word"); }
-			else if (mode == Numbers) { puts("digit number"); }
-
-			lives = strlen(answer) * 2;
+			showMenu(game.state, game.mode);
+			processChoice(&game);
 		}
 
-		if (state == Win)
+		if (game.state == Win)
 		{
 			puts("Congratulations, you've won! Thanks for playing!");
 
-			showMenu(state, mode);
-			processChoice(&state, &mode);
+			showMenu(game.state, game.mode);
+			processChoice(&game);
 		}
 
-		if (state == Lose)
+		if (game.state == Lose)
 		{
 			puts("Unfortunately, the game is over");
-			printf("The answer is: %s", answer);
+			printf("The answer was: %s\n", game.answer);
 
-			showMenu(state, mode);
-			processChoice(&state, &mode);
+			showMenu(game.state, game.mode);
+			processChoice(&game);
 		}
 
-		if (state == Play)
+		if (game.state == Play)
 		{
-			if (lives == 1) { puts("Last attempt"); }
-			else { printf("You have %d lives left\n", lives); }
+			if (game.lives == 1) { puts("Last attempt"); }
+			else { printf("You have %d lives left\n", game.lives); }
 
 			fputs("Your guess: ", stdout);
-			fgets(guess, strlen(answer) + 1, stdin); /* Reading no more than length of answer */
+			fgets(game.guess, strlen(game.answer) + 1, stdin); /* Reading no more than length of answer */
 			fseek(stdin, 0, SEEK_END); /* Discarding unread characters from input stream */
 
-			findTheBeasts(answer, guess, &bulls, &cows);
+			findTheBeasts(game.answer, game.guess, &game.bulls, &game.cows);
 
-			printf("Bulls: %d\nCows: %d\n\n", bulls, cows);
+			printf("Bulls: %d\nCows: %d\n\n", game.bulls, game.cows);
 
-			if (bulls == strlen(answer)) { state = Win; }
+			if (game.bulls == strlen(game.answer)) { game.state = Win; }
 			else
 			{
-				lives--;
-				if (lives <= 0) { mode = Lose; }
+				game.lives--;
+				if (game.lives <= 0) { game.state = Lose; }
 			}
 		}
 	}
