@@ -112,20 +112,20 @@ void generateSequence(GameMode mode, char* sequence)
 
 		if (!file)
 		{
-			errorHandler(1, "words.txt");
+			errorHandler(ERR_FILE, "words.txt");
 		}
 
 		fscanf(file, "%d", &maxWordsAmount);
 
 		if (maxWordsAmount < MINWORDSAMOUNT || maxWordsAmount > MAXWORDSAMOUNT)
 		{
-			errorHandler(3, MINWORDSAMOUNT, MAXWORDSAMOUNT);
+			errorHandler(ERR_DATA, MINWORDSAMOUNT, MAXWORDSAMOUNT);
 		}
 
 		words = (char**)(malloc(maxWordsAmount * sizeof(char*)));
 		if (!words)
 		{
-			errorHandler(2);
+			errorHandler(ERR_ALLOC);
 		}
 
 		int readWordsAmount = 0;
@@ -136,7 +136,7 @@ void generateSequence(GameMode mode, char* sequence)
 			words[i] = (char*)(malloc((MAXWORDSIZE + 1) * sizeof(char)));
 			if (!words[i])
 			{
-				errorHandler(2);
+				errorHandler(ERR_ALLOC);
 			}
 
 			if (fscanf(file, " %s", buffer) == EOF) { readWordsAmount = i; break; }
@@ -146,7 +146,7 @@ void generateSequence(GameMode mode, char* sequence)
 
 		if (readWordsAmount < MINWORDSAMOUNT || readWordsAmount > MAXWORDSAMOUNT)
 		{
-			errorHandler(3, MINWORDSAMOUNT, MAXWORDSAMOUNT);
+			errorHandler(ERR_DATA, MINWORDSAMOUNT, MAXWORDSAMOUNT);
 		}
 
 		strcpy(sequence, words[randomNumberGenerator(0, readWordsAmount)]);
@@ -175,7 +175,7 @@ void generateSequence(GameMode mode, char* sequence)
 		number = (char*)(malloc((difficulty + 1) * sizeof(char)));
 		if (!number)
 		{
-			errorHandler(2);
+			errorHandler(ERR_ALLOC);
 		}
 
 		for (int i = 0; i < difficulty; i++)

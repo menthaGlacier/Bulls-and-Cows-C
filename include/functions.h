@@ -3,10 +3,9 @@
 
 #include "pch.h"
 #include "constants.h"
+#include "errorHandler.h"
 
 int randomNumberGenerator(int min, int max);
-
-void errorHandler(int errCode, ...);
 
 void toLowercase(char* word);
 

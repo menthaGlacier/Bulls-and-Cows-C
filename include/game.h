@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "constants.h"
 #include "functions.h"
+#include "errorHandler.h"
 
 typedef enum GameState
 {
