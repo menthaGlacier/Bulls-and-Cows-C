@@ -112,24 +112,20 @@ void generateSequence(GameMode mode, char* sequence)
 
 		if (!file)
 		{
-			puts("An error occured while trying to open file");
-			exit(-1);
+			errorHandler(1, "words.txt");
 		}
 
 		fscanf(file, "%d", &maxWordsAmount);
 
 		if (maxWordsAmount < MINWORDSAMOUNT || maxWordsAmount > MAXWORDSAMOUNT)
 		{
-			printf("Amount of words should be in [%d; %d] range\n",
-				MINWORDSAMOUNT, MAXWORDSAMOUNT);
-			exit(-2);
+			errorHandler(3, MINWORDSAMOUNT, MAXWORDSAMOUNT);
 		}
 
 		words = (char**)(malloc(maxWordsAmount * sizeof(char*)));
 		if (!words)
 		{
-			puts("An error occurred while trying to allocate memory for a words array");
-			exit(-3);
+			errorHandler(2);
 		}
 
 		int readWordsAmount = 0;
@@ -140,8 +136,7 @@ void generateSequence(GameMode mode, char* sequence)
 			words[i] = (char*)(malloc((MAXWORDSIZE + 1) * sizeof(char)));
 			if (!words[i])
 			{
-				puts("An error occurred while trying to allocate memory for a word");
-				exit(-4);
+				errorHandler(2);
 			}
 
 			if (fscanf(file, " %s", buffer) == EOF) { readWordsAmount = i; break; }
@@ -149,11 +144,9 @@ void generateSequence(GameMode mode, char* sequence)
 			strcpy(words[i], buffer);
 		}
 
-		if (readWordsAmount < MINWORDSAMOUNT)
+		if (readWordsAmount < MINWORDSAMOUNT || readWordsAmount > MAXWORDSAMOUNT)
 		{
-			printf("The number of words read is less than the required minimum of %d words",
-				MINWORDSAMOUNT);
-			exit(-6);
+			errorHandler(3, MINWORDSAMOUNT, MAXWORDSAMOUNT);
 		}
 
 		strcpy(sequence, words[randomNumberGenerator(0, readWordsAmount)]);
@@ -182,8 +175,7 @@ void generateSequence(GameMode mode, char* sequence)
 		number = (char*)(malloc((difficulty + 1) * sizeof(char)));
 		if (!number)
 		{
-			puts("An error occured while trying to allocate memory for a number");
-			exit(-7);
+			errorHandler(2);
 		}
 
 		for (int i = 0; i < difficulty; i++)

@@ -6,6 +6,8 @@
 
 int randomNumberGenerator(int min, int max);
 
+void errorHandler(int errCode);
+
 void toLowercase(char* word);
 
 void sortNumbers(int arr[], int numOfElementsToSort);
