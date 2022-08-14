@@ -5,6 +5,7 @@ void errorHandler(ErrorCode errCode, ...)
 	puts("");
 
 	va_list argptr;
+	va_start(argptr, errCode);
 
 	switch (errCode)
 	{
