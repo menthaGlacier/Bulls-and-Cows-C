@@ -3,8 +3,8 @@
 
 #include "pch.h"
 #include "constants.h"
-#include "functions.h"
 #include "errorHandler.h"
+#include "functions.h"
 
 typedef enum GameState
 {
